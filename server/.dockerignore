@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+
+# Maven
+target/
+.mvn/
+pom.xml.*
+
+# IDEs and editors
+*.iml
+.idea/
+.vscode/
+*.swp
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+*.pid
+*.seed
+
+# Node.js (if applicable, like in a full-stack app with frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+
+# Other unnecessary files
+*.md
