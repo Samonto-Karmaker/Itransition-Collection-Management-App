@@ -15,10 +15,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import LoginFormModal from "../body/forms/LogInFormModal";
+import RegisterFormModal from "../body/forms/RegisterFormModal";
 
 const NavigationBar = () => {
 
 	const [loginFormModal, setLoginFormModal] = useState(false);
+	const [registerFormModal, setRegisterFormModal] = useState(false);
 
 	return (
 		<Navbar
@@ -65,7 +67,7 @@ const NavigationBar = () => {
 							<NavDropdown.Item onClick={() => setLoginFormModal(true)}>
 								Login
 							</NavDropdown.Item>
-							<NavDropdown.Item href="#action4">
+							<NavDropdown.Item onClick={() => setRegisterFormModal(true)}>
 								Register
 							</NavDropdown.Item>
 							<NavDropdown.Divider />
@@ -92,6 +94,10 @@ const NavigationBar = () => {
 			<LoginFormModal 
 				show={loginFormModal}
 				onHide={() => setLoginFormModal(false)}
+			/>
+			<RegisterFormModal
+				show={registerFormModal}
+				onHide={() => setRegisterFormModal(false)}
 			/>
 		</Navbar>
 	);
