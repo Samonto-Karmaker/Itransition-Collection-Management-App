@@ -1,9 +1,11 @@
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import {
+	Button,
+	Container,
+	Form,
+	Nav,
+	Navbar,
+	NavDropdown,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faBars,
@@ -11,10 +13,19 @@ import {
 	faHouse,
 	faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import LoginFormModal from "../body/forms/LogInFormModal";
 
 const NavigationBar = () => {
+
+	const [loginFormModal, setLoginFormModal] = useState(false);
+
 	return (
-		<Navbar expand="lg" className="bg-body-tertiary" style={{padding: "15px"}}>
+		<Navbar
+			expand="lg"
+			className="bg-body-tertiary"
+			style={{ padding: "15px" }}
+		>
 			<Container fluid>
 				<Navbar.Brand href="#">
 					Arbitrary Collection Manager
@@ -27,15 +38,17 @@ const NavigationBar = () => {
 						navbarScroll
 					>
 						<Nav.Link href="#action1">
-							<div style={{marginRight: "5px"}}>
+							<div style={{ marginRight: "5px" }}>
 								<FontAwesomeIcon icon={faHouse} />
 								<span style={{ marginLeft: "5px" }}>Home</span>
 							</div>
 						</Nav.Link>
 						<Nav.Link href="#action2">
-							<div style={{marginRight: "5px"}}>
+							<div style={{ marginRight: "5px" }}>
 								<FontAwesomeIcon icon={faFolder} />
-								<span style={{ marginLeft: "5px" }}>All Collections</span>
+								<span style={{ marginLeft: "5px" }}>
+									All Collections
+								</span>
 							</div>
 						</Nav.Link>
 						<NavDropdown
@@ -49,7 +62,7 @@ const NavigationBar = () => {
 							}
 							id="navbarScrollingDropdown"
 						>
-							<NavDropdown.Item href="#action3">
+							<NavDropdown.Item onClick={() => setLoginFormModal(true)}>
 								Login
 							</NavDropdown.Item>
 							<NavDropdown.Item href="#action4">
@@ -76,6 +89,10 @@ const NavigationBar = () => {
 					</Form>
 				</Navbar.Collapse>
 			</Container>
+			<LoginFormModal 
+				show={loginFormModal}
+				onHide={() => setLoginFormModal(false)}
+			/>
 		</Navbar>
 	);
 };
