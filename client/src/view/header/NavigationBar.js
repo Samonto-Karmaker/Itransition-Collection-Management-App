@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import LoginFormModal from "../body/forms/LogInFormModal";
 import RegisterFormModal from "../body/forms/RegisterFormModal";
+import { Link } from "react-router-dom";
 
 const NavigationBar = () => {
 
@@ -29,7 +30,7 @@ const NavigationBar = () => {
 			style={{ padding: "15px" }}
 		>
 			<Container fluid>
-				<Navbar.Brand href="#">
+				<Navbar.Brand as={Link} to="/" >
 					Arbitrary Collection Manager
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="navbarScroll" />
@@ -39,13 +40,13 @@ const NavigationBar = () => {
 						style={{ maxHeight: "100px" }}
 						navbarScroll
 					>
-						<Nav.Link href="#action1">
+						<Nav.Link as={Link} to="/" >
 							<div style={{ marginRight: "5px" }}>
 								<FontAwesomeIcon icon={faHouse} />
 								<span style={{ marginLeft: "5px" }}>Home</span>
 							</div>
 						</Nav.Link>
-						<Nav.Link href="#action2">
+						<Nav.Link as={Link} to="/collections">
 							<div style={{ marginRight: "5px" }}>
 								<FontAwesomeIcon icon={faFolder} />
 								<span style={{ marginLeft: "5px" }}>
@@ -71,7 +72,7 @@ const NavigationBar = () => {
 								Register
 							</NavDropdown.Item>
 							<NavDropdown.Divider />
-							<NavDropdown.Item href="#action5">
+							<NavDropdown.Item as={Link} to="/admin-panel" >
 								Admin Panel
 							</NavDropdown.Item>
 						</NavDropdown>
