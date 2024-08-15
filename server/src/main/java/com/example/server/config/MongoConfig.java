@@ -17,9 +17,20 @@ public class MongoConfig {
 
     @Bean
     public MongoTemplate mongoTemplate() {
+        // Fallback mechanism to use system environment variables if not found by dotenv
+        String connectionString = Objects.requireNonNullElse(
+                dotenvConfig.dotenv().get("MONGODB_CONNECTION_STRING"),
+                System.getenv("MONGODB_CONNECTION_STRING")
+        );
+
+        String databaseName = Objects.requireNonNullElse(
+                dotenvConfig.dotenv().get("MONGODB_DATABASE_NAME"),
+                System.getenv("MONGODB_DATABASE_NAME")
+        );
+
         return new MongoTemplate(
-                MongoClients.create(Objects.requireNonNull(dotenvConfig.dotenv().get("MONGODB_CONNECTION_STRING"))),
-                Objects.requireNonNull(dotenvConfig.dotenv().get("MONGODB_DATABASE_NAME"))
+                MongoClients.create(connectionString),
+                databaseName
         );
     }
 }

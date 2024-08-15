@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -19,7 +20,10 @@ public class JwtUtil {
 
     public JwtUtil(DotenvConfig dotenvConfig) {
         this.dotenvConfig = dotenvConfig;
-        SECRET = dotenvConfig.dotenv().get("JWT_SECRET");
+        SECRET = Objects.requireNonNullElse(
+                dotenvConfig.dotenv().get("JWT_SECRET"),
+                System.getenv("JWT_SECRET")
+        );
     }
 
     public String extractUsername(String token) {
