@@ -1,5 +1,6 @@
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useState } from 'react';
+import { config } from '../../../constant';
 
 const RegisterFormModal = ({ show, onHide }) => {
 
@@ -18,23 +19,46 @@ const RegisterFormModal = ({ show, onHide }) => {
     };
 
     // TODO: Implement register functionality
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
             window.alert("Passwords do not match!");
             return;
         }
-        console.log(formData);
-        window.alert("Register button clicked!");
-        setFormData({
-            username: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-        });
-        setTimeout(() => {
-            onHide();
-        }, 1000);
+        try {
+            const url = config.API_URL + "/api/auth/register";
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password,
+                }),
+            })
+
+            if (response.ok) {
+                const data = await response.text();
+                window.alert(data);
+                setFormData({
+                    username: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                });
+                setTimeout(() => {
+                    onHide();
+                }, 1000);
+            } else {
+                const error = await response.text();
+                window.alert(error);
+            }
+        } catch (error) {
+            console.error("Error registering user: ", error);
+            window.alert("Error registering user!");
+        }
     };
 
     return (
