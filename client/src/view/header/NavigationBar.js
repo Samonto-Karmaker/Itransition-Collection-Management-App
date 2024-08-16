@@ -13,15 +13,17 @@ import {
 	faHouse,
 	faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import LoginFormModal from "../body/forms/LogInFormModal";
 import RegisterFormModal from "../body/forms/RegisterFormModal";
-import { Link } from "react-router-dom";
+import { UserContext } from "../../components/UserContext";
 
 const NavigationBar = () => {
 
 	const [loginFormModal, setLoginFormModal] = useState(false);
 	const [registerFormModal, setRegisterFormModal] = useState(false);
+	const { User } = useContext(UserContext);
 
 	return (
 		<Navbar
@@ -65,16 +67,33 @@ const NavigationBar = () => {
 							}
 							id="navbarScrollingDropdown"
 						>
-							<NavDropdown.Item onClick={() => setLoginFormModal(true)}>
-								Login
-							</NavDropdown.Item>
-							<NavDropdown.Item onClick={() => setRegisterFormModal(true)}>
-								Register
-							</NavDropdown.Item>
-							<NavDropdown.Divider />
-							<NavDropdown.Item as={Link} to="/admin-panel" >
-								Admin Panel
-							</NavDropdown.Item>
+							{User ? (
+                                <>
+                                    <NavDropdown.Item>
+                                        My Collections
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item onClick={() => {/* Add logout logic here */}}>
+                                        Logout
+                                    </NavDropdown.Item>
+                                    {User.Admin && (
+                                        <>
+                                            <NavDropdown.Divider />
+                                            <NavDropdown.Item as={Link} to="/admin-panel">
+                                                Admin Panel
+                                            </NavDropdown.Item>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <NavDropdown.Item onClick={() => setLoginFormModal(true)}>
+                                        Login
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item onClick={() => setRegisterFormModal(true)}>
+                                        Register
+                                    </NavDropdown.Item>
+                                </>
+                            )}
 						</NavDropdown>
 					</Nav>
 					<Form className="d-flex">

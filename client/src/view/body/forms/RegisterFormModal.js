@@ -39,7 +39,7 @@ const RegisterFormModal = ({ show, onHide }) => {
             })
 
             if (response.ok) {
-                window.alert("Registered successfully!");
+                window.alert("Registered successfully! Now you can log in.");
                 setFormData({
                     username: "",
                     email: "",

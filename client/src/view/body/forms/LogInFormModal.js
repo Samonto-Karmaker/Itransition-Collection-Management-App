@@ -1,12 +1,15 @@
 import { Button, Form, Modal } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { config } from "../../../constant";
+import { UserContext } from "../../../components/UserContext";
 
 const LoginFormModal = ({ show, onHide }) => {
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
 	});
+
+	const { setUser } = useContext(UserContext);
 
 	const handleChange = (e) => {
 		setFormData({
@@ -34,6 +37,11 @@ const LoginFormModal = ({ show, onHide }) => {
 			if (response.ok) {
 				const result = await response.json();
 				console.log(result);
+
+				localStorage.setItem("token", result.jwt);
+				localStorage.setItem("user", JSON.stringify(result.data));
+				setUser(result.data);
+
 				window.alert("Logged in successfully!");
 				setFormData({
 					email: "",

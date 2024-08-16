@@ -64,4 +64,11 @@ public class UserService {
         }
     }
 
+    public Boolean isTokenStillValid(String token) {
+        Boolean isTokenExpired = jwtUtil.validateToken(token);
+        if (!isTokenExpired) {
+            throw new IllegalArgumentException("Token is expired");
+        }
+        return true;
+    }
 }
