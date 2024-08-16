@@ -1,5 +1,6 @@
 import { Button, Form, Modal } from "react-bootstrap";
 import { useState } from "react";
+import { config } from "../../../constant";
 
 const LoginFormModal = ({ show, onHide }) => {
 	const [formData, setFormData] = useState({
@@ -15,17 +16,40 @@ const LoginFormModal = ({ show, onHide }) => {
 	};
 
     // TODO: Implement login functionality
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault();
-        console.log(formData);
-		window.alert("Login button clicked!");
-        setFormData({
-            email: "",
-            password: "",
-        });
-        setTimeout(() => {
-            onHide();
-        }, 1000);
+        try {
+			const url = config.API_URL + "/api/auth/login";
+			const response = await fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email: formData.email,
+					password: formData.password,
+				}),
+			});
+
+			if (response.ok) {
+				const result = await response.json();
+				console.log(result);
+				window.alert("Logged in successfully!");
+				setFormData({
+					email: "",
+					password: "",
+				});
+				setTimeout(() => {
+					onHide();
+				}, 1000);
+			} else {
+				const error = await response.json();
+				window.alert(error.message);
+			}
+		} catch (error) {
+			console.error("Error logging in user: ", error);
+			window.alert("Error logging in user!");
+		}
 	};
 
 	return (
@@ -48,7 +72,7 @@ const LoginFormModal = ({ show, onHide }) => {
 						/>
 					</Form.Group>
 					<Form.Group className="mb-3" controlId="Password">
-						<Form.Label>Email addr</Form.Label>
+						<Form.Label>Password</Form.Label>
 						<Form.Control
 							type="password"
 							placeholder="Enter password"

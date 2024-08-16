@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class UserService {
 
@@ -47,7 +49,15 @@ public class UserService {
                     () -> new IllegalArgumentException("User not found")
             );
             String jwt = jwtUtil.generateToken(customUserDetailsService.loadUserByUsername(email).getUsername());
-            return new AuthResponseDTO(jwt, user);
+
+            Map<String, Object> data = Map.of(
+                    "id", user.getId(),
+                    "username", user.getUsername(),
+                    "email", user.getEmail(),
+                    "Admin", user.isAdmin(),
+                    "Blocked", user.isBlocked()
+            );
+            return new AuthResponseDTO(jwt, data);
 
         } catch (BadCredentialsException e) {
             throw new IllegalArgumentException("Incorrect email or password");

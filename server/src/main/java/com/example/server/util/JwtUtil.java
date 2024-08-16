@@ -4,9 +4,11 @@ import com.example.server.config.DotenvConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,15 +17,19 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-    private final String SECRET;
+    private final SecretKey SECRET_KEY;
     DotenvConfig dotenvConfig;
 
     public JwtUtil(DotenvConfig dotenvConfig) {
         this.dotenvConfig = dotenvConfig;
-        SECRET = Objects.requireNonNullElse(
+        String secret = Objects.requireNonNullElse(
                 dotenvConfig.dotenv().get("JWT_SECRET"),
                 System.getenv("JWT_SECRET")
         );
+        if (secret.length() < 32) {
+            throw new IllegalArgumentException("JWT_SECRET must be at least 32 characters long");
+        }
+        SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String extractUsername(String token) {
@@ -40,7 +46,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -56,7 +62,7 @@ public class JwtUtil {
         long EXPIRATION_TIME = 86_400_000L;
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET).compact();
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
