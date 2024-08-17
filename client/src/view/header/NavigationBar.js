@@ -14,16 +14,26 @@ import {
 	faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginFormModal from "../body/forms/LogInFormModal";
 import RegisterFormModal from "../body/forms/RegisterFormModal";
 import { UserContext } from "../../components/UserContext";
+import RemoveCredentials from "../../components/utils/RemoveCredentials";
 
 const NavigationBar = () => {
 
 	const [loginFormModal, setLoginFormModal] = useState(false);
 	const [registerFormModal, setRegisterFormModal] = useState(false);
-	const { User } = useContext(UserContext);
+	const { User, setUser } = useContext(UserContext);
+	const navigate = useNavigate();
+
+	const logout = () => {
+		if (User && window.confirm("Are you sure you want to logout?")) {
+			RemoveCredentials(setUser);
+			window.alert("You have been logged out.");
+			navigate("/");
+		}
+	}
 
 	return (
 		<Navbar
@@ -72,7 +82,7 @@ const NavigationBar = () => {
                                     <NavDropdown.Item>
                                         My Collections
                                     </NavDropdown.Item>
-                                    <NavDropdown.Item onClick={() => {/* Add logout logic here */}}>
+                                    <NavDropdown.Item onClick={logout}>
                                         Logout
                                     </NavDropdown.Item>
                                     {User.Admin && (
