@@ -4,21 +4,16 @@ import Footer from "./footer/Footer";
 import Header from "./header/Header";
 import { config } from "../constant";
 import { UserContext } from "../components/UserContext";
+import RemoveCredentials from "../components/utils/RemoveCredentials";
 
 const MainComponent = () => {
     const jwt = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     const { setUser } = useContext(UserContext);
 
-    const removeInvalidCredentials = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
-    };
-
     const checkTokenExpiry = async () => {
         if (!jwt) {
-            removeInvalidCredentials();
+            RemoveCredentials(setUser);
             return;
         }
 
@@ -38,16 +33,16 @@ const MainComponent = () => {
                     setUser(userObj);
                     console.log("Token is still valid");
                 } else {
-                    removeInvalidCredentials();
+                    RemoveCredentials(setUser);
                 }
             } else {
-                removeInvalidCredentials();
+                RemoveCredentials(setUser);
                 const error = await response.text();
                 console.error("Error checking token expiry: ", error);
             }
         } catch (error) {
             console.error("Error checking token expiry: ", error);
-            removeInvalidCredentials();
+            RemoveCredentials(setUser);
         }
     };
 
