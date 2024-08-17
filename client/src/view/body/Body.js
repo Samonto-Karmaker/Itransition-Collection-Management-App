@@ -7,8 +7,8 @@ const Body = () => {
 	return (
 		<>
 			<Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/collections" element={<AllCollections />} />
+        		<Route exact path="/" element={<Home />} />
+        		<Route exact path="/collections" element={<AllCollections />} />
 				<Route exact path="/admin-panel" element={<AdminPanel />} />
 			</Routes>
 		</>

@@ -31,4 +31,8 @@ public class User {
         this.isBlocked = false;
     }
 
+    public String getId() {
+        return id.toHexString();
+    }
+
 }

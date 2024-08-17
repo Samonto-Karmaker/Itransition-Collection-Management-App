@@ -18,7 +18,6 @@ const RegisterFormModal = ({ show, onHide }) => {
         });
     };
 
-    // TODO: Implement register functionality
     const handleRegister = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
@@ -40,8 +39,7 @@ const RegisterFormModal = ({ show, onHide }) => {
             })
 
             if (response.ok) {
-                const data = await response.text();
-                window.alert(data);
+                window.alert("Registered successfully! Now you can log in.");
                 setFormData({
                     username: "",
                     email: "",

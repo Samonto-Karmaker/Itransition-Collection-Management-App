@@ -1,11 +1,15 @@
 import { Button, Form, Modal } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { config } from "../../../constant";
+import { UserContext } from "../../../components/UserContext";
 
 const LoginFormModal = ({ show, onHide }) => {
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
 	});
+
+	const { setUser } = useContext(UserContext);
 
 	const handleChange = (e) => {
 		setFormData({
@@ -15,17 +19,45 @@ const LoginFormModal = ({ show, onHide }) => {
 	};
 
     // TODO: Implement login functionality
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault();
-        console.log(formData);
-		window.alert("Login button clicked!");
-        setFormData({
-            email: "",
-            password: "",
-        });
-        setTimeout(() => {
-            onHide();
-        }, 1000);
+        try {
+			const url = config.API_URL + "/api/auth/login";
+			const response = await fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email: formData.email,
+					password: formData.password,
+				}),
+			});
+
+			if (response.ok) {
+				const result = await response.json();
+				console.log(result);
+
+				localStorage.setItem("token", result.jwt);
+				localStorage.setItem("user", JSON.stringify(result.data));
+				setUser(result.data);
+
+				window.alert("Logged in successfully!");
+				setFormData({
+					email: "",
+					password: "",
+				});
+				setTimeout(() => {
+					onHide();
+				}, 1000);
+			} else {
+				const error = await response.json();
+				window.alert(error.message);
+			}
+		} catch (error) {
+			console.error("Error logging in user: ", error);
+			window.alert("Error logging in user!");
+		}
 	};
 
 	return (
@@ -48,7 +80,7 @@ const LoginFormModal = ({ show, onHide }) => {
 						/>
 					</Form.Group>
 					<Form.Group className="mb-3" controlId="Password">
-						<Form.Label>Email addr</Form.Label>
+						<Form.Label>Password</Form.Label>
 						<Form.Control
 							type="password"
 							placeholder="Enter password"
