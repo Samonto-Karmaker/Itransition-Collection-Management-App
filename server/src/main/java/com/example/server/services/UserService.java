@@ -48,6 +48,11 @@ public class UserService {
             User user = userRepository.findByEmail(email).orElseThrow(
                     () -> new IllegalArgumentException("User not found")
             );
+
+            if (user.isBlocked()) {
+                throw new IllegalArgumentException("User is blocked");
+            }
+
             String jwt = jwtUtil.generateToken(customUserDetailsService.loadUserByUsername(email).getUsername());
 
             Map<String, Object> data = Map.of(
