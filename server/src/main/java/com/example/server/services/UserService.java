@@ -127,11 +127,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public String deleteUser(String id) {
+    public User deleteUser(String id) {
         User user = userRepository.findById(new ObjectId(id)).orElseThrow(
                 () -> new IllegalArgumentException("User not found")
         );
         userRepository.delete(user);
-        return "The User has been deleted";
+        return user;
     }
 }
