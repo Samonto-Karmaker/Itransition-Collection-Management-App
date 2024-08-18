@@ -21,29 +21,21 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO) {
-        try {
-            User user = userService.createUser(
-                    registerDTO.getUsername(),
-                    registerDTO.getEmail(),
-                    registerDTO.getPassword()
-            );
-            return ResponseEntity.ok("User created with id: " + user.getId());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        User user = userService.createUser(
+                registerDTO.getUsername(),
+                registerDTO.getEmail(),
+                registerDTO.getPassword()
+        );
+        return ResponseEntity.ok("User created with id: " + user.getId());
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO) {
-        try {
-            AuthResponseDTO authResponseDTO = userService.loginUser(
-                    loginDTO.getEmail(),
-                    loginDTO.getPassword()
-            );
-            return ResponseEntity.ok(authResponseDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        AuthResponseDTO authResponseDTO = userService.loginUser(
+                loginDTO.getEmail(),
+                loginDTO.getPassword()
+        );
+        return ResponseEntity.ok(authResponseDTO);
     }
 
     @GetMapping("/isTokenStillValid")
@@ -53,13 +45,9 @@ public class AuthController {
         }
 
         token = token.substring(7);
-        try {
-            if (userService.isTokenStillValid(token)) {
-                return ResponseEntity.ok("true");
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("false");
-            }
-        } catch (IllegalArgumentException e) {
+        if (userService.isTokenStillValid(token)) {
+            return ResponseEntity.ok("true");
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("false");
         }
     }

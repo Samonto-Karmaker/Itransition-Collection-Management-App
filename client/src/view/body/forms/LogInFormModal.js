@@ -55,8 +55,8 @@ const LoginFormModal = ({ show, onHide }) => {
 				window.alert(error.message);
 			}
 		} catch (error) {
-			console.error("Error logging in user: ", error);
-			window.alert("Error logging in user!");
+			console.error("Error logging in user: ", error.message);
+			window.alert("Error logging in user: ", error.message);
 		}
 	};
 

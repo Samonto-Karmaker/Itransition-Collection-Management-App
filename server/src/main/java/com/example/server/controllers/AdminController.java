@@ -21,65 +21,41 @@ public class AdminController {
 
     @GetMapping("/users")
     public ResponseEntity<List<DefaultResponseDTO>> getUsers() {
-        try {
-            List<User> allUsers = userService.getAllUsers();
-            List<DefaultResponseDTO> data = allUsers.stream()
-                    .map(this::prepareResponseUser)
-                    .toList();
-            return ResponseEntity.ok(data);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        List<User> allUsers = userService.getAllUsers();
+        List<DefaultResponseDTO> data = allUsers.stream()
+                .map(this::prepareResponseUser)
+                .toList();
+        return ResponseEntity.ok(data);
     }
 
     @PutMapping("/block/{id}")
     public ResponseEntity<DefaultResponseDTO> blockUser(@PathVariable String id) {
-        try {
-            User user = userService.blockUser(id);
-            return ResponseEntity.ok(prepareResponseUser(user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        User user = userService.blockUser(id);
+        return ResponseEntity.ok(prepareResponseUser(user));
     }
 
     @PutMapping("/unblock/{id}")
     public ResponseEntity<DefaultResponseDTO> unblockUser(@PathVariable String id) {
-        try {
-            User user = userService.unblockUser(id);
-            return ResponseEntity.ok(prepareResponseUser(user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        User user = userService.unblockUser(id);
+        return ResponseEntity.ok(prepareResponseUser(user));
     }
 
     @PutMapping("/promote/{id}")
     public ResponseEntity<DefaultResponseDTO> promoteUser(@PathVariable String id) {
-        try {
-            User user = userService.makeUserAdmin(id);
-            return ResponseEntity.ok(prepareResponseUser(user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        User user = userService.makeUserAdmin(id);
+        return ResponseEntity.ok(prepareResponseUser(user));
     }
 
     @PutMapping("/demote/{id}")
     public ResponseEntity<DefaultResponseDTO> demoteUser(@PathVariable String id) {
-        try {
-            User user = userService.removeAdminRole(id);
-            return ResponseEntity.ok(prepareResponseUser(user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        User user = userService.removeAdminRole(id);
+        return ResponseEntity.ok(prepareResponseUser(user));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<DefaultResponseDTO> deleteUser(@PathVariable String id) {
-        try {
-            User user = userService.deleteUser(id);
-            return ResponseEntity.ok(prepareResponseUser(user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        User user = userService.deleteUser(id);
+        return ResponseEntity.ok(prepareResponseUser(user));
     }
 
     private DefaultResponseDTO prepareResponseUser(User user) {
