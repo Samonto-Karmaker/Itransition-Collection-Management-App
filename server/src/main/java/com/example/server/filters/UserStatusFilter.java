@@ -6,8 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,29 +24,13 @@ public class UserStatusFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String email = ((UserDetails) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal())
-                .getUsername();
-
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> {
-                    try {
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    return new IllegalArgumentException("User not found");
-                }
-        );
-
-        if (user.isBlocked()) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is blocked");
-            return;
-        }
-
-        if (!user.isAdmin() && request.getRequestURI().startsWith("/api/admin")) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is not an admin");
-            return;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String email = authentication.getName();
+            User user = userRepository.findByEmail(email).orElseThrow(
+                    () -> new IllegalArgumentException("User not found")
+            );
+            request.setAttribute("user", user);
         }
 
         filterChain.doFilter(request, response);

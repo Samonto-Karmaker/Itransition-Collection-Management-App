@@ -2,7 +2,6 @@ package com.example.server.config;
 
 import com.example.server.filters.JwtRequestFilter;
 import com.example.server.filters.UserStatusFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,8 +50,8 @@ public class AppConfig {
                         .anyRequest().permitAll())
                 .exceptionHandling(
                         exception -> exception
-                                .authenticationEntryPoint((request, response, e) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                                .accessDeniedHandler((request, response, e) -> response.sendError(HttpServletResponse.SC_FORBIDDEN))
+                                .authenticationEntryPoint((request, response, e) -> {throw new RuntimeException("Authentication error: " + e);})
+                                .accessDeniedHandler((request, response, e) -> {throw new RuntimeException("Access denied: " + e);})
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(userStatusFilter, JwtRequestFilter.class);
