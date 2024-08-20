@@ -132,10 +132,35 @@ const AdminPanel = () => {
 		}
 	};
 
-	const deleteUser = (e) => {
+	const deleteUser = async (userId) => {
 		if (window.confirm("Are you sure you want to delete this user?")) {
-			// Delete the user
-			window.alert("User has been deleted.");
+			const url = config.API_URL + `/api/admin/delete/${userId}`;
+			try {
+				const response = await fetch(url, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if (response.ok) {
+					const updatedUserList = userList.filter((user) => user.id !== userId);
+					setUserList(updatedUserList);
+					window.alert("User has been deleted.");
+
+					if(User.id === userId) {
+						RemoveCredentials(setUser);
+						window.alert("Your account has been deleted. Please contact the administrator.");
+						navigate("/");
+					}
+				} else {
+					const result = await response.json();
+					window.alert(result.message);
+				}
+			} catch (error) {
+				console.error(error);
+				window.alert("Something went wrong");
+			}
 		}
 	};
 
@@ -195,7 +220,7 @@ const AdminPanel = () => {
 								{user.Admin ? "Admin" : "User"}
 							</td>
 							<td>
-								<Button variant="danger" onClick={deleteUser}>
+								<Button variant="danger" onClick={() => deleteUser(user.id)}>
 									<FontAwesomeIcon icon={faTrash} />
 								</Button>
 							</td>
