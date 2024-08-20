@@ -91,8 +91,45 @@ const AdminPanel = () => {
 		}
 	};
 
-	const toggleRole = (e) => {
-		e.target.innerText = e.target.innerText === "User" ? "Admin" : "User";
+	const toggleRole = async (userId) => {
+		if (window.confirm("Are you sure you want to change the role of this user?")) {
+
+			const action = userList.find((user) => user.id === userId).Admin ? "demote" : "promote";
+			const url = config.API_URL + `/api/admin/${action}/${userId}`;
+
+			try {
+				const response = await fetch(url, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				
+				if(response.ok) {
+					const updatedUserList = userList.map((user) => {
+						if (user.id === userId) {
+							user.Admin = !user.Admin;
+						}
+						return user;
+					});
+					setUserList(updatedUserList);
+					window.alert("User role has been changed.");
+
+					if(User.id === userId && action === "demote") {
+						RemoveCredentials(setUser);
+						window.alert("Your role has been changed. Please contact the administrator.");
+						navigate("/");
+					}
+				} else {
+					const result = await response.json();
+					window.alert(result.message);
+				}
+			} catch (error) {
+				console.error(error);
+				window.alert("Something went wrong");
+			}
+		}
 	};
 
 	const deleteUser = (e) => {
@@ -153,7 +190,7 @@ const AdminPanel = () => {
 							</td>
 							<td
 								style={{ cursor: "pointer" }}
-								onClick={toggleRole}
+								onClick={() => toggleRole(user.id)}
 							>
 								{user.Admin ? "Admin" : "User"}
 							</td>
