@@ -1,7 +1,7 @@
 package com.example.server.config;
 
 import com.example.server.filters.JwtRequestFilter;
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.server.filters.UserStatusFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,17 +41,20 @@ public class AppConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, UserStatusFilter userStatusFilter) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()) // For now, permit all requests
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().permitAll())
                 .exceptionHandling(
                         exception -> exception
-                                .authenticationEntryPoint((request, response, e) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                                .accessDeniedHandler((request, response, e) -> response.sendError(HttpServletResponse.SC_FORBIDDEN))
+                                .authenticationEntryPoint((request, response, e) -> {throw new RuntimeException("Authentication error: " + e);})
+                                .accessDeniedHandler((request, response, e) -> {throw new RuntimeException("Access denied: " + e);})
                 )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(userStatusFilter, JwtRequestFilter.class);
 
         return httpSecurity.build();
     }

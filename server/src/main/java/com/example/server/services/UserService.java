@@ -4,6 +4,7 @@ import com.example.server.models.User;
 import com.example.server.models.dto.AuthResponseDTO;
 import com.example.server.repositories.UserRepository;
 import com.example.server.util.JwtUtil;
+import org.bson.types.ObjectId;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -70,10 +72,62 @@ public class UserService {
     }
 
     public Boolean isTokenStillValid(String token) {
-        Boolean isTokenExpired = jwtUtil.validateToken(token);
-        if (!isTokenExpired) {
-            throw new IllegalArgumentException("Token is expired");
+        return jwtUtil.validateToken(token);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User blockUser(String id) {
+        User user = userRepository.findById(new ObjectId(id)).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        if (user.isBlocked()) {
+            throw new IllegalArgumentException("User is already blocked");
         }
-        return true;
+        user.setBlocked(true);
+        return userRepository.save(user);
+    }
+
+    public User unblockUser(String id) {
+        User user = userRepository.findById(new ObjectId(id)).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        if (!user.isBlocked()) {
+            throw new IllegalArgumentException("User is not blocked");
+        }
+        user.setBlocked(false);
+        return userRepository.save(user);
+    }
+
+    public User makeUserAdmin(String id) {
+        User user = userRepository.findById(new ObjectId(id)).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        if (user.isAdmin()) {
+            throw new IllegalArgumentException("User is already an admin");
+        }
+        user.setAdmin(true);
+        return userRepository.save(user);
+    }
+
+    public User removeAdminRole(String id) {
+        User user = userRepository.findById(new ObjectId(id)).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        if (!user.isAdmin()) {
+            throw new IllegalArgumentException("User is not an admin");
+        }
+        user.setAdmin(false);
+        return userRepository.save(user);
+    }
+
+    public User deleteUser(String id) {
+        User user = userRepository.findById(new ObjectId(id)).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        userRepository.delete(user);
+        return user;
     }
 }
