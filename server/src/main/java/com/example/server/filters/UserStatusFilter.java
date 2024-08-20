@@ -30,6 +30,15 @@ public class UserStatusFilter extends OncePerRequestFilter {
             User user = userRepository.findByEmail(email).orElseThrow(
                     () -> new IllegalArgumentException("User not found")
             );
+
+            if (user.isBlocked()) {
+                throw new IllegalArgumentException("User is blocked");
+            }
+
+            if (!user.isAdmin() && request.getRequestURI().startsWith("/api/admin")) {
+                throw new IllegalArgumentException("User is not an admin");
+            }
+
             request.setAttribute("user", user);
         }
 
