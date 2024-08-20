@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class UserUtil {
 
-    public User getCurrentUser(HttpServletRequest request) {
+    public static User getCurrentUser(HttpServletRequest request) {
         return (User) request.getAttribute("user");
     }
 }
