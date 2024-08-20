@@ -47,6 +47,11 @@ public class AppConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/api/collections/user",
+                                "/api/collections/create",
+                                "/api/collections/delete/**"
+                        ).hasRole("USER")
                         .anyRequest().permitAll())
                 .exceptionHandling(
                         exception -> exception
