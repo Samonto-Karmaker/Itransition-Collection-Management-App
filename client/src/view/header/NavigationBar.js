@@ -79,7 +79,7 @@ const NavigationBar = () => {
 						>
 							{User ? (
                                 <>
-                                    <NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/my-collections">
                                         My Collections
                                     </NavDropdown.Item>
                                     <NavDropdown.Item onClick={logout}>
