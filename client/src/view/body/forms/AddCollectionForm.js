@@ -80,7 +80,7 @@ const AddCollectionForm = () => {
 				},
 				body: JSON.stringify(collection),
 			});
-			const result = await response.json();
+			const result = await response.text();
 			if (response.ok) {
 				window.alert("Collection added successfully");
 				setCollection({
@@ -90,7 +90,7 @@ const AddCollectionForm = () => {
 					customFields: {},
 				});
 			} else {
-				window.alert(result.message);
+				window.alert(result);
 			}
 		} catch (error) {
 			console.error("Error:", error);

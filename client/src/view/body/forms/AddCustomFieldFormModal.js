@@ -41,6 +41,7 @@ const AddCustomFieldFormModal = ({
 							>
 								<option value="text">1 line Text</option>
 								<option value="textarea">Multiline Text</option>
+                                <option value="number">Number</option>
 								<option value="date">Date</option>
 							</Form.Select>
 						</Col>

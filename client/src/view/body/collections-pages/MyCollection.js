@@ -20,7 +20,7 @@ const MyCollection = () => {
 		<div>
 			<h1>My Collection</h1>
             <Button>
-                <Link to="/add-collection" style={{textDecoration: "none"}}>Add Collection</Link>
+                <Link to="/add-collection" style={{textDecoration: "none", color: "white"}}>Add Collection</Link>
             </Button>
 		</div>
 	);
