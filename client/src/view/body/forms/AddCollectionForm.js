@@ -2,9 +2,12 @@ import { useState, useContext } from "react";
 import { Button, Form, Row, Col, Container, Card } from "react-bootstrap";
 import { UserContext } from "../../../components/UserContext";
 import AddCustomFieldFormModal from "./AddCustomFieldFormModal";
+import { config } from "../../../constant";
 
 const AddCollectionForm = () => {
 	const { User } = useContext(UserContext);
+	const token = localStorage.getItem("token");
+
 	const [collection, setCollection] = useState({
 		name: "",
 		category: "",
@@ -65,9 +68,34 @@ const AddCollectionForm = () => {
 		setShowModal(false);
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		console.log(collection);
-		window.alert("Collection added successfully");
+		const url = config.API_URL + "/api/collections/create";
+		try {
+			const response = await fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(collection),
+			});
+			const result = await response.json();
+			if (response.ok) {
+				window.alert("Collection added successfully");
+				setCollection({
+					name: "",
+					category: "",
+					description: "",
+					customFields: {},
+				});
+			} else {
+				window.alert(result.message);
+			}
+		} catch (error) {
+			console.error("Error:", error);
+			window.alert("Something went wrong");
+		}
 	};
 
 	if (!User) {

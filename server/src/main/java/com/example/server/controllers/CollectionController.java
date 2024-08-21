@@ -1,6 +1,7 @@
 package com.example.server.controllers;
 
 import com.example.server.models.Collection;
+import com.example.server.models.dto.CollectionDTO;
 import com.example.server.models.dto.DefaultResponseDTO;
 import com.example.server.services.CollectionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,14 +49,14 @@ public class CollectionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createCollection(
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam String category,
-            @RequestParam Map<String, String> customFields,
-            HttpServletRequest request
-    ) {
-        String response = collectionService.createCollection(name, description, category, customFields, request);
+    public ResponseEntity<String> createCollection(@RequestBody CollectionDTO collectionDTO, HttpServletRequest request) {
+        String response = collectionService.createCollection(
+                collectionDTO.getName(),
+                collectionDTO.getDescription(),
+                collectionDTO.getCategory(),
+                collectionDTO.getCustomFields(),
+                request
+        );
         return ResponseEntity.ok(response);
     }
 
