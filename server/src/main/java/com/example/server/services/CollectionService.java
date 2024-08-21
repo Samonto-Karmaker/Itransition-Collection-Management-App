@@ -17,7 +17,7 @@ public class CollectionService {
 
     private final CollectionRepository collectionRepository;
 
-    public CollectionService(com.example.server.repositories.CollectionRepository collectionRepository) {
+    public CollectionService(CollectionRepository collectionRepository) {
         this.collectionRepository = collectionRepository;
     }
 
