@@ -14,3 +14,41 @@
   padding: 8px !important; 
   text-align: center !important; 
 }
+
+.custom-fields {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.custom-field-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-field-item:last-child {
+  border-bottom: none;
+}
+
+.custom-field-name {
+  font-weight: 600;
+  color: #343a40;
+}
+
+.custom-field-type {
+  font-style: italic;
+  color: #6c757d;
+}
+
+h2, h4 {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
