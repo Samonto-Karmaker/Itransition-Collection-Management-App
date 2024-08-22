@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,5 +24,10 @@ public class Item {
     private List<ObjectId> tags; // List of tag ids
     private Map<String, Object> custom_fields; // Field name and value
     private List<ObjectId> likes; // List of user ids
+    private Date created_at;
+
+    public String getId() {
+        return id.toHexString();
+    }
 
 }
