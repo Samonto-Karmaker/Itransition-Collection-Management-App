@@ -50,7 +50,11 @@ public class AppConfig {
                         .requestMatchers(
                                 "/api/collections/user",
                                 "/api/collections/create",
-                                "/api/collections/delete/**"
+                                "/api/collections/delete/**",
+                                "/api/items/create",
+                                "/api/items/like/**",
+                                "/api/items/unlike/**",
+                                "/api/items/delete/**"
                         ).hasRole("USER")
                         .anyRequest().permitAll())
                 .exceptionHandling(
