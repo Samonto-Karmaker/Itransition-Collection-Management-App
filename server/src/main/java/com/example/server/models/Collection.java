@@ -26,4 +26,8 @@ public class Collection {
     private Date created_at;
     private Date updated_at;
 
+    public String getId() {
+        return id.toHexString();
+    }
+
 }
