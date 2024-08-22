@@ -11,10 +11,10 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemDTO {
-    String id;
-    String collectionId;
-    String name;
-    List<String> tags;
-    Map<String, Object> custom_fields;
-    List<String> likes;
+    private String id;
+    private String collectionId;
+    private String name;
+    private List<String> tags;
+    private Map<String, Object> custom_fields;
+    private List<String> likes;
 }
