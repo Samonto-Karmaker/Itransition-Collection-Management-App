@@ -16,5 +16,4 @@ public class ItemDTO {
     private String name;
     private List<String> tags;
     private Map<String, Object> custom_fields;
-    private List<String> likes;
 }

@@ -1,9 +1,11 @@
 package com.example.server.controllers;
 
 import com.example.server.models.Collection;
+import com.example.server.models.Item;
 import com.example.server.models.dto.CollectionDTO;
 import com.example.server.models.dto.DefaultResponseDTO;
 import com.example.server.services.CollectionService;
+import com.example.server.services.ItemService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +18,11 @@ import java.util.Map;
 public class CollectionController {
 
     private final CollectionService collectionService;
+    private final ItemService itemService;
 
-    public CollectionController(CollectionService collectionService) {
+    public CollectionController(CollectionService collectionService, ItemService itemService) {
         this.collectionService = collectionService;
+        this.itemService = itemService;
     }
 
     @GetMapping("/all")
@@ -45,7 +49,20 @@ public class CollectionController {
         if (collection == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(prepareResponseCollection(collection));
+        List<Item> items = itemService.getItemsByCollectionId(id);
+        DefaultResponseDTO response = prepareResponseCollection(collection);
+        response.getData().put("items", items.stream()
+                .map(item -> Map.of(
+                        "id", item.getId(),
+                        "name", item.getName(),
+                        "tags", item.getTags(),
+                        "custom_fields", item.getCustom_fields(),
+                        "likes", item.getLikes(),
+                        "created_at", item.getCreated_at()
+                ))
+                .toList()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/create")
