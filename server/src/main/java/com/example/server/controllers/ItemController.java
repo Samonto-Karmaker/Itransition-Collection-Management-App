@@ -29,6 +29,14 @@ public class ItemController {
                 .toList());
     }
 
+    @GetMapping("/collection/{collectionId}")
+    public ResponseEntity<List<DefaultResponseDTO>> getItemsByCollectionId(@PathVariable String collectionId) {
+        List<Item> items = itemService.getItemsByCollectionId(collectionId);
+        return ResponseEntity.ok(items.stream()
+                .map(this::prepareResponseItem)
+                .toList());
+    }
+
     @GetMapping("/item/{id}")
     public ResponseEntity<DefaultResponseDTO> getItemById(@PathVariable String id) {
         Item item = itemService.getItemById(id);

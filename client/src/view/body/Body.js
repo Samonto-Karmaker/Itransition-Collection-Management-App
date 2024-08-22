@@ -4,6 +4,7 @@ import AllCollections from "./collections-pages/AllCollection";
 import Home from "./home-page/Home";
 import MyCollection from "./collections-pages/MyCollection";
 import AddCollectionForm from "./forms/AddCollectionForm";
+import CollectionDetails from "./collections-pages/CollectionDetails";
 
 const Body = () => {
 	return (
@@ -14,6 +15,7 @@ const Body = () => {
 				<Route exact path="/admin-panel" element={<AdminPanel />} />
 				<Route exact path="/my-collections" element={<MyCollection />} />
 				<Route exact path="/add-collection" element={<AddCollectionForm />} />
+				<Route exact path="/collections/:id" element={<CollectionDetails />} />
 			</Routes>
 		</>
 	);

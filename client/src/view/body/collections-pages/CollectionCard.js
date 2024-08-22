@@ -4,6 +4,7 @@ import { UserContext } from "../../../components/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { config } from "../../../constant";
+import { Link } from "react-router-dom";
 
 const CollectionCard = ({ collection }) => {
 	const { id, userId, name, category, description } = collection;
@@ -61,7 +62,9 @@ const CollectionCard = ({ collection }) => {
 						<FontAwesomeIcon icon={faTrash} />
 					</Button>
 				)}
-				<Button variant="primary">View Collection</Button>
+				<Button as={Link} to={`/collections/${id}`} variant="primary">
+					View Collection
+				</Button>
 			</Card.Footer>
 		</Card>
 	);
