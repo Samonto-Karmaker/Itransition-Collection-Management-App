@@ -1,7 +1,9 @@
 package com.example.server.services;
 
+import com.example.server.models.Collection;
 import com.example.server.models.User;
 import com.example.server.models.dto.AuthResponseDTO;
+import com.example.server.repositories.CollectionRepository;
 import com.example.server.repositories.UserRepository;
 import com.example.server.util.JwtUtil;
 import org.bson.types.ObjectId;
@@ -24,13 +26,15 @@ public class UserService {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final CollectionRepository collectionRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService, JwtUtil jwtUtil, AuthenticationManager authenticationManager, CollectionRepository collectionRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.customUserDetailsService = customUserDetailsService;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.collectionRepository = collectionRepository;
     }
 
     public User createUser(String username, String email, String password) {
@@ -124,9 +128,12 @@ public class UserService {
     }
 
     public User deleteUser(String id) {
-        User user = userRepository.findById(new ObjectId(id)).orElseThrow(
+        ObjectId userId = new ObjectId(id);
+        User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("User not found")
         );
+        List<Collection> collections = collectionRepository.findByUserId(userId);
+        collectionRepository.deleteAll(collections);
         userRepository.delete(user);
         return user;
     }
