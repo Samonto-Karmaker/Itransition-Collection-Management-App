@@ -1,8 +1,10 @@
 package com.example.server.services;
 
 import com.example.server.models.Collection;
+import com.example.server.models.Item;
 import com.example.server.models.User;
 import com.example.server.repositories.CollectionRepository;
+import com.example.server.repositories.ItemRepository;
 import com.example.server.util.UserUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.bson.types.ObjectId;
@@ -16,9 +18,13 @@ import java.util.Map;
 public class CollectionService {
 
     private final CollectionRepository collectionRepository;
+    private final ItemService itemService;
+    private final ItemRepository itemRepository;
 
-    public CollectionService(CollectionRepository collectionRepository) {
+    public CollectionService(CollectionRepository collectionRepository, ItemService itemService, ItemRepository itemRepository) {
         this.collectionRepository = collectionRepository;
+        this.itemService = itemService;
+        this.itemRepository = itemRepository;
     }
 
     public List<Collection> getAllCollections() {
@@ -62,7 +68,8 @@ public class CollectionService {
         if (!collection.getUserId().toHexString().equals(currentUser.getId()) && !currentUser.isAdmin()) {
             throw new IllegalArgumentException("You are not allowed to delete this collection");
         }
-
+        List<Item> items = itemService.getItemsByCollectionId(collectionId);
+        itemRepository.deleteAll(items);
         collectionRepository.deleteById(new ObjectId(collectionId));
         return "Collection deleted";
     }

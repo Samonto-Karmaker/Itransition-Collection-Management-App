@@ -17,4 +17,8 @@ public class Tag {
     private ObjectId id;
     private String name;
 
+    public String getId() {
+        return id.toHexString();
+    }
+
 }
