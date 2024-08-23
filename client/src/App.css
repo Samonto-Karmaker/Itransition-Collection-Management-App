@@ -91,3 +91,44 @@ hr {
   border: none;
   border-top: 1px solid #dee2e6;
 }
+
+.add-item-form {
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-item-form h1 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+}
+
+.react-select-container {
+  font-size: 1rem;
+  color: #333;
+}
+
+.react-select__control {
+  border-color: #ccc !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  &:hover {
+      border-color: #007bff !important;
+  }
+}
+
+.react-select__menu {
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .add-item-form {
+      width: 50%;
+      margin: 0 auto;
+  }
+}
+

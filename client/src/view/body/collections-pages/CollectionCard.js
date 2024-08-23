@@ -15,7 +15,7 @@ const CollectionCard = ({ collection }) => {
 		if (
 			window.confirm("Are you sure you want to delete this collection?")
 		) {
-            console.log(collection);
+			console.log(collection);
 			const url =
 				config.API_URL + "/api/collections/delete/" + collectionId;
 			try {
@@ -27,13 +27,13 @@ const CollectionCard = ({ collection }) => {
 					},
 				});
 				const result = await response.text();
-                if (response.ok) {
-                    window.alert("Collection deleted successfully");
-                    window.location.reload();
-                    return;
-                } else {
-                    window.alert(result);
-                }
+				if (response.ok) {
+					window.alert("Collection deleted successfully");
+					window.location.reload();
+					return;
+				} else {
+					window.alert(result);
+				}
 			} catch (error) {
 				console.error(error);
 				window.alert("Failed to delete collection");
@@ -62,8 +62,14 @@ const CollectionCard = ({ collection }) => {
 						<FontAwesomeIcon icon={faTrash} />
 					</Button>
 				)}
-				<Button as={Link} to={`/collections/${id}`} variant="primary">
-					View Collection
+				<Button variant="primary">
+					<Link
+						to={`/collections/${id}`}
+						state={{ collection: collection }}
+						style={{ textDecoration: "none", color: "white" }}
+					>
+						View Collection
+					</Link>
 				</Button>
 			</Card.Footer>
 		</Card>

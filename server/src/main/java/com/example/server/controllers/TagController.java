@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tags")
@@ -29,9 +30,12 @@ public class TagController {
     }
 
     private DefaultResponseDTO prepareResponseTag(Tag tag) {
-        DefaultResponseDTO response = new DefaultResponseDTO();
-        response.getData().put("id", tag.getId());
-        response.getData().put("name", tag.getName());
+        DefaultResponseDTO response = new DefaultResponseDTO(
+                Map.of(
+                        "id", tag.getId(),
+                        "name", tag.getName()
+                )
+        );
         return response;
     }
 }
