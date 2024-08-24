@@ -5,6 +5,7 @@ import com.example.server.models.dto.DefaultResponseDTO;
 import com.example.server.models.dto.ItemDTO;
 import com.example.server.services.ItemService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,9 +82,9 @@ public class ItemController {
                 "id", item.getId(),
                 "collectionId", item.getCollectionId(),
                 "name", item.getName(),
-                "tags", item.getTags(),
+                "tags", item.getTags().stream().map(ObjectId::toHexString).toList(),
                 "custom_fields", item.getCustom_fields(),
-                "likes", item.getLikes()
+                "likes", item.getLikes().stream().map(ObjectId::toHexString).toList()
         ));
     }
 }
