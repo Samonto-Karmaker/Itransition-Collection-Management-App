@@ -56,7 +56,7 @@ const AddItemForm = () => {
             collectionId: id,
             name: name,
             tags: selectedTags.map(tag => tag.label),
-            customFields: customFieldsData
+            custom_fields: customFieldsData
         };
 
         const url = `${config.API_URL}/api/items/create`;
