@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Button, Container, Row, Col, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../../components/UserContext";
 import CollectionCard from "./CollectionCard";
@@ -61,8 +61,13 @@ const MyCollection = () => {
 
     if(loading) {
         return (
-            <div>
-                <h1>Loading...</h1>
+            <div style={{
+				padding: "10px",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+			}}>
+                <Spinner animation="border" />
             </div>
         )
     }
