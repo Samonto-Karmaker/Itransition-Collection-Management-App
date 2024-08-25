@@ -9,7 +9,7 @@ import AddItemForm from "./item-components/AddItemForm";
 
 const Body = () => {
 	return (
-		<>
+		<div className="body">
 			<Routes>
         		<Route exact path="/" element={<Home />} />
         		<Route exact path="/collections" element={<AllCollections />} />
@@ -19,7 +19,7 @@ const Body = () => {
 				<Route exact path="/collections/:id" element={<CollectionDetails />} />
 				<Route exact path="/collections/add-item" element={<AddItemForm />} />
 			</Routes>
-		</>
+		</div>
 	);
 };
 
