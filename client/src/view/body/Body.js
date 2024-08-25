@@ -6,10 +6,11 @@ import MyCollection from "./collections-pages/MyCollection";
 import AddCollectionForm from "./forms/AddCollectionForm";
 import CollectionDetails from "./collections-pages/CollectionDetails";
 import AddItemForm from "./item-components/AddItemForm";
+import ErrorPage from "./ErrorPage";
 
 const Body = () => {
 	return (
-		<>
+		<div className="body">
 			<Routes>
         		<Route exact path="/" element={<Home />} />
         		<Route exact path="/collections" element={<AllCollections />} />
@@ -18,8 +19,9 @@ const Body = () => {
 				<Route exact path="/add-collection" element={<AddCollectionForm />} />
 				<Route exact path="/collections/:id" element={<CollectionDetails />} />
 				<Route exact path="/collections/add-item" element={<AddItemForm />} />
+				<Route path="*" element={<ErrorPage />} />
 			</Routes>
-		</>
+		</div>
 	);
 };
 

@@ -1,5 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { Table, Button, Spinner} from 'react-bootstrap';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from '../../../components/UserContext';
 import { fetchTags } from '../../../components/utils/FetchPreDefinedTags';
 import { config } from "../../../constant";
@@ -132,7 +134,7 @@ const ItemsTable = ({ collectionId, userId }) => {
                 <tr>
                     <th>Name</th>
                     <th>Tags</th>
-                    {User && <th>Like</th>}
+                    {User ? <th>Like</th> : <th>Likes</th>}
                     {userId === User?.id && <th>Delete</th>}
                 </tr>
             </thead>
@@ -141,18 +143,28 @@ const ItemsTable = ({ collectionId, userId }) => {
                     <tr key={item.id}>
                         <td>{item.name}</td>
                         <td>{item.tags.map(tagId => tags[tagId]).join(', ')}</td>
-                        {User && (
+                        {User ? (
                             <td>
                                 {item.likes.includes(User.id) ? (
-                                    <Button variant="secondary" onClick={() => handleUnlike(item.id)}>Unlike</Button>
+                                    <Button variant="secondary" onClick={() => handleUnlike(item.id)}>
+                                        <FontAwesomeIcon icon={faThumbsUp} />
+                                        <span style={{marginLeft: "5px"}}>{item.likes.length}</span>
+                                    </Button>
                                 ) : (
-                                    <Button variant="primary" onClick={() => handleLike(item.id)}>Like</Button>
+                                    <Button variant="primary" onClick={() => handleLike(item.id)}>
+                                        <FontAwesomeIcon icon={faThumbsUp} />
+                                        <span style={{marginLeft: "5px"}}>{item.likes.length}</span>
+                                    </Button>
                                 )}
                             </td>
+                        ) : (
+                            <td>{item.likes.length}</td>
                         )}
                         <td>
                             {userId === User?.id && (
-                                <Button variant="danger" onClick={() => handleDelete(item.id)}>Delete</Button>
+                                <Button variant="danger" onClick={() => handleDelete(item.id)}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </Button>
                             )}
                         </td>
                     </tr>

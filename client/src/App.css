@@ -125,6 +125,18 @@ hr {
   border-radius: 4px;
 }
 
+.body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 20px 0;
+  background-color: #f8f9fa;
+}
+
 @media (min-width: 768px) {
   .add-item-form {
       width: 50%;

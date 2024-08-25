@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import CollectionCard from "./CollectionCard";
 import { config } from "../../../constant";
 
@@ -53,8 +53,13 @@ const AllCollections = () => {
 
     if(loading) {
         return (
-            <div>
-                <h1>Loading...</h1>
+            <div style={{
+				padding: "10px",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+			}}>
+                <Spinner animation="border" />
             </div>
         )
     }

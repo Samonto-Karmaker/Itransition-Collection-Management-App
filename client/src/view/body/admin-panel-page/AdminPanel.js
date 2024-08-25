@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Spinner } from "react-bootstrap";
 import { config } from "../../../constant";
 import { UserContext } from "../../../components/UserContext";
 import RemoveCredentials from "../../../components/utils/RemoveCredentials";
@@ -46,7 +46,6 @@ const AdminPanel = () => {
 		}
 	}, [User, token]);
 
-	// TODO: Implement the following functions
 	const toggleStatus = async (userId) => {
 		if (
 			window.confirm(
@@ -184,10 +183,14 @@ const AdminPanel = () => {
 
 	if (loading) {
 		return (
-			<div>
-				<h1>Admin Panel</h1>
-				<p>Loading...</p>
-			</div>
+			<div style={{
+				padding: "10px",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+			}}>
+                <Spinner animation="border" />
+            </div>
 		);
 	}
 
